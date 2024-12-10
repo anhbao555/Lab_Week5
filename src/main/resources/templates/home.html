@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Chủ</title>
+</head>
+<body>
+<h1>Chào mừng, [[${candidate.getFullName()}]]!</h1>
+<p>Trang chính </p>
+<h2>Các kỹ năng của bạn :</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Kỹ năng</th>
+        <th>Mô tả</th>
+        <th>Trình độ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="candidateSkill : ${candidateSkills}">
+        <td th:text="${candidateSkill.skill.skillName}">Tên kỹ năng</td>
+        <td th:text="${candidateSkill.moreInfos}">Mô tả kỹ năng</td>
+        <td th:text="${candidateSkill.skillLevel}">Trình độ</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
