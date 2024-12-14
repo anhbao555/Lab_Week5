@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, Integer> {
-
+    Skill findById(Long id);
 }
