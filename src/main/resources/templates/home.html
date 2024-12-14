@@ -3,11 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Trang Chủ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .job-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Khoảng cách giữa các thẻ job */
+        }
+        .job {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            flex: 1 1 calc(33.333% - 20px); /* Mỗi thẻ chiếm 1/3 chiều rộng trừ khoảng cách */
+            box-sizing: border-box;
+        }
+        .job h2 {
+            margin: 0 0 10px;
+        }
+        .job button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .job button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            .job {
+                flex: 1 1 calc(50% - 20px); /* Chuyển sang 2 cột khi màn hình nhỏ hơn 768px */
+            }
+        }
+        @media (max-width: 480px) {
+            .job {
+                flex: 1 1 100%; /* Hiển thị 1 cột khi màn hình nhỏ hơn 480px */
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>Chào mừng, [[${candidate.getFullName()}]]!</h1>
-<p>Trang chính </p>
-<h2>Các kỹ năng của bạn :</h2>
+<h1>Chào mừng, [[${candidate.fullName}]]!</h1>
+<h2>Các kỹ năng của bạn:</h2>
 <table>
     <thead>
     <tr>
@@ -18,11 +59,50 @@
     </thead>
     <tbody>
     <tr th:each="candidateSkill : ${candidateSkills}">
-        <td th:text="${candidateSkill.skill.skillName}">Tên kỹ năng</td>
-        <td th:text="${candidateSkill.moreInfos}">Mô tả kỹ năng</td>
-        <td th:text="${candidateSkill.skillLevel}">Trình độ</td>
+        <td th:text="${candidateSkill.skill.skillName} + ' ' + ${candidateSkill.skill.id}"></td>
+        <td th:text="${candidateSkill.moreInfos}"></td>
+        <td th:text="${candidateSkill.skillLevel}"></td>
     </tr>
+
     </tbody>
 </table>
+<button type="button" onclick="toggleMissingSkills()">
+    Hiển thị kỹ năng thiếu
+</button>
+<ul id="missingSkillsList" style="display: none;">
+    <li th:each="skill : ${missingSkills}" th:text="${skill.skillName}"></li>
+</ul>
+
+<!-- Khu vực hiển thị danh sách kỹ năng còn thiếu -->
+<div id="missingSkills-[[${job.id}]]" class="missing-skills"></div>
+<h2>Các công việc phù hợp với bạn:</h2>
+<div class="job-container">
+    <!-- Lặp qua danh sách jobs -->
+    <div th:each="job : ${jobs}" class="job">
+        <p><strong>Job Name:</strong> <span th:text="${job.jobName}"></span></p>
+        <p><strong>Required Skills:</strong></p>
+        <ul>
+            <li th:each="jobSkill : ${jobSkillsMap.get(job)}" th:text="${jobSkill.skill.skillName}"></li>
+        </ul>
+        <p><strong>Description:</strong> <span th:text="${job.jobDesc}"></span></p>
+        <button th:attr="onclick=|viewJobDetails('${job.jobName}')|">View Details</button>
+
+    </div>
+</div>
+<script>
+    function viewJobDetails(jobName) {
+        alert('You selected: ' + jobName);
+    }
+    function toggleMissingSkills() {
+        var skillsList = document.getElementById('missingSkillsList');
+
+        // Kiểm tra trạng thái hiện tại và thay đổi trạng thái hiển thị
+        if (skillsList.style.display === "none") {
+            skillsList.style.display = "block";  // Hiển thị danh sách
+        } else {
+            skillsList.style.display = "none";  // Ẩn danh sách
+        }
+    }
+</script>
 </body>
 </html>

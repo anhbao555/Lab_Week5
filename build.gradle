@@ -32,12 +32,15 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.jboss.logging:jboss-logging:3.5.2.Final'
+
 	//for country code
 	implementation 'com.neovisionaries:nv-i18n:1.29'
 	//For database REST
 	implementation 'org.springframework.data:spring-data-rest-core:4.1.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {

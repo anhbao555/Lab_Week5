@@ -8,6 +8,6 @@ import vn.edu.iuh.fit.lab_week_05.backend.models.CandidateSkillId;
 import java.util.List;
 
 @Repository
-public interface CandidateSkillRepository extends JpaRepository<CandidateSkill, CandidateSkillId> {
+public interface CandidateSkillRepository extends JpaRepository<CandidateSkill, Long> {
     List<CandidateSkill> findByCanId(Long candidateId);
 }

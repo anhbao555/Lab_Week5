@@ -3,15 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Developer Job Posting</title>
+    <title>Job Postings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .job-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Khoảng cách giữa các thẻ job */
+        }
+        .job {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            flex: 1 1 calc(33.333% - 20px); /* Mỗi thẻ chiếm 1/3 chiều rộng trừ khoảng cách */
+            box-sizing: border-box;
+        }
+        .job h2 {
+            margin: 0 0 10px;
+        }
+        .job button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .job button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            .job {
+                flex: 1 1 calc(50% - 20px); /* Chuyển sang 2 cột khi màn hình nhỏ hơn 768px */
+            }
+        }
+        @media (max-width: 480px) {
+            .job {
+                flex: 1 1 100%; /* Hiển thị 1 cột khi màn hình nhỏ hơn 480px */
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>Job Posting: Java Developer</h1>
-<div>
-    <p><strong>Job Name:</strong> Java Developer</p>
-    <p><strong>Job Description:</strong> Responsible for developing and maintaining Java-based applications, ensuring high performance and responsiveness to requests from the front-end. Collaborate with cross-functional teams to define, design, and ship new features.</p>
-    <p><strong>Required Skills:</strong> Java, Spring Boot, RESTful APIs, SQL, Git</p>
-    <p><strong>Experience:</strong> 2+ years in software development</p>
+<h1>Job Postings</h1>
+
+<div class="job-container">
+    <div class="job">
+        <h2>Java Developer</h2>
+        <p><strong>Job Description:</strong> Responsible for developing and maintaining Java-based applications, ensuring high performance and responsiveness to requests from the front-end. Collaborate with cross-functional teams to define, design, and ship new features.</p>
+        <p><strong>Required Skills:</strong> Java, Spring Boot, RESTful APIs, SQL, Git</p>
+        <p><strong>Experience:</strong> 2+ years in software development</p>
+        <button onclick="viewJobDetails('Java Developer')">View Details</button>
+    </div>
+
+    <div class="job">
+        <h2>Front-End Developer</h2>
+        <p><strong>Job Description:</strong> Design and implement user interfaces for web applications. Collaborate with back-end developers and UI/UX designers to improve usability and ensure technical feasibility.</p>
+        <p><strong>Required Skills:</strong> HTML, CSS, JavaScript, React, RESTful APIs</p>
+        <p><strong>Experience:</strong> 2+ years in front-end development</p>
+        <button onclick="viewJobDetails('Front-End Developer')">View Details</button>
+    </div>
+
+    <div class="job">
+        <h2>Data Analyst</h2>
+        <p><strong>Job Description:</strong> Collect, analyze, and interpret data to provide insights for business decisions. Develop and maintain dashboards and reports for key stakeholders.</p>
+        <p><strong>Required Skills:</strong> SQL, Python, Excel, Data Visualization Tools</p>
+        <p><strong>Experience:</strong> 1+ years in data analysis</p>
+        <button onclick="viewJobDetails('Data Analyst')">View Details</button>
+    </div>
+
 </div>
+<div class="job-container">
+    <!-- Lặp qua danh sách jobs -->
+    <div th:each="job : ${jobs}" class="job">
+        <p><strong>Job Name:</strong> <span th:text="${job.jobName}"></span></p>
+        <p><strong>Required Skills:</strong></p>
+        <ul>
+            <li th:each="jobSkill : ${jobSkillsMap.get(job)}" th:text="${jobSkill.skill.skillName}"></li>
+        </ul>
+        <p><strong>Description:</strong> <span th:text="${job.jobDesc}"></span></p>
+        <!--        <button onclick="viewJobDetails(${job.jobName})">View Details</button>-->
+        <!--        <button th:attr="onclick='viewJobDetails(&quot;${job.jobName}&quot;)'">View Details</button>-->
+        <!--        <button th:attr="onclick='viewJobDetails(&#34;${job.jobName}&#34;)'">View Details</button>-->
+        <button th:attr="onclick=|viewJobDetails('${job.jobName}')|">View Details</button>
+    </div>
+</div>
+<script>
+    function viewJobDetails(jobName) {
+        alert('You selected: ' + jobName);
+        // Redirect or load job details page
+        // Example: window.location.href = '/job-details?job=' + encodeURIComponent(jobName);
+    }
+</script>
 </body>
 </html>
