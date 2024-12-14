@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Job</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #skillsInput {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #tagsContainer {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 10px;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tag .remove-btn {
+            margin-left: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add Job</h2>
+    <form action="/submit-job" method="post">
+        <div>
+            <label for="jobName">Job Name:</label>
+            <input type="text" id="jobName" name="jobName" required />
+        </div>
+        <div>
+            <label for="jobDescription">Job Description:</label>
+            <textarea id="jobDescription" name="jobDescription" required></textarea>
+        </div>
+        <div>
+            <label for="skills">Select Skills:</label>
+            <select id="skills" name="jobSkills" multiple="multiple" onchange="addTags()">
+                <!-- Cập nhật phần này với danh sách kỹ năng -->
+                <th:block th:each="skill : ${skills}">
+                    <option th:value="${skill.id}" th:text="${skill.skillName}"></option>
+                </th:block>
+            </select>
+        </div>
+        <input type="text" id="skillsInput" readonly placeholder="Chọn kỹ năng" />
+
+        <div id="tagsContainer">
+            <!-- Các thẻ sẽ được thêm vào đây -->
+        </div>
+        <button type="submit">Submit Job</button>
+    </form>
+</div>
+
+<script>
+    function addTags() {
+        var select = document.getElementById("skills");
+        var selectedOptions = Array.from(select.selectedOptions);  // Lấy tất cả các kỹ năng đã chọn
+        var input = document.getElementById('skillsInput');
+        var tagsContainer = document.getElementById('tagsContainer');
+
+        // Làm sạch các thẻ cũ
+        tagsContainer.innerHTML = "";
+
+        // Mảng để lưu các kỹ năng đã chọn
+        var selectedSkills = [];
+
+        selectedOptions.forEach(function(option) {
+            selectedSkills.push(option.text);
+
+            // Tạo thẻ cho mỗi kỹ năng đã chọn
+            var tag = document.createElement('div');
+            tag.classList.add('tag');
+            tag.innerHTML = option.text +
+                '<span class="remove-btn" onclick="removeSkillTag(this, \'' + option.value + '\')">x</span>';
+            tagsContainer.appendChild(tag);
+        });
+
+        // Cập nhật lại giá trị của input text
+        input.value = selectedSkills.join(", ");
+    }
+
+    // Hàm xóa thẻ kỹ năng
+    function removeSkillTag(btn, skillValue) {
+        var tag = btn.parentNode;
+        tag.parentNode.removeChild(tag);
+
+        var select = document.getElementById("skills");
+        var input = document.getElementById('skillsInput');
+        var currentValue = input.value.split(", ");
+
+        // Xóa kỹ năng khỏi mảng
+        currentValue = currentValue.filter(function(skill) {
+            return skill !== tag.textContent.trim();
+        });
+
+        // Cập nhật lại giá trị input text
+        input.value = currentValue.join(", ");
+
+        // Bỏ chọn kỹ năng trong select
+        var option = Array.from(select.options).find(option => option.value === skillValue);
+        if (option) {
+            option.selected = false;
+        }
+    }
+</script>
+</body>
+</html>

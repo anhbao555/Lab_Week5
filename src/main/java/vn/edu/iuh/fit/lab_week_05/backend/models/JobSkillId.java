@@ -27,10 +27,10 @@ public class JobSkillId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        JobSkillId entity = (JobSkillId) o;
-        return Objects.equals(this.jobId, entity.jobId) &&
-                Objects.equals(this.skillId, entity.skillId);
+        if (o == null || getClass() != o.getClass()) return false;  // Sử dụng getClass() thay vì Hibernate.getClass()
+        JobSkillId that = (JobSkillId) o;
+        return Objects.equals(jobId, that.jobId) &&
+                Objects.equals(skillId, that.skillId);
     }
 
     @Override
